@@ -4,3 +4,13 @@ server:
 spring:
   application:
     name: flight
+  datasource:
+    url: jdbc:postgresql://localhost:5432/flight_write
+    username: postgres
+    password: postgres
+  jpa:
+    hibernate:
+      ddl-auto: validate
+  flyway:
+    enabled: true
+    locations: classpath:db/migration

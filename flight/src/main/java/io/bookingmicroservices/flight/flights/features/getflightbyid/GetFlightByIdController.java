@@ -1,6 +1,7 @@
 package io.bookingmicroservices.flight.flights.features.getflightbyid;
 
-import io.bookingmicroservices.flight.flights.InMemoryFlightRepository;
+import io.bookingmicroservices.flight.data.jpa.entities.FlightEntity;
+import io.bookingmicroservices.flight.data.jpa.repositories.FlightJpaRepository;
 import io.bookingmicroservices.flight.flights.models.Flight;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,15 +15,16 @@ import java.util.UUID;
 @RequestMapping("/api/v1/flight")
 public class GetFlightByIdController {
 
-    private final InMemoryFlightRepository repository;
+    private final FlightJpaRepository repository;
 
-    public GetFlightByIdController(InMemoryFlightRepository repository) {
+    public GetFlightByIdController(FlightJpaRepository repository) {
         this.repository = repository;
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<Flight> getById(@PathVariable UUID id) {
         return repository.findById(id)
+                .map(FlightEntity::toModel)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }

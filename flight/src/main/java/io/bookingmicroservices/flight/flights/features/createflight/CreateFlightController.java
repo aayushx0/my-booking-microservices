@@ -1,6 +1,7 @@
 package io.bookingmicroservices.flight.flights.features.createflight;
 
-import io.bookingmicroservices.flight.flights.InMemoryFlightRepository;
+import io.bookingmicroservices.flight.data.jpa.entities.FlightEntity;
+import io.bookingmicroservices.flight.data.jpa.repositories.FlightJpaRepository;
 import io.bookingmicroservices.flight.flights.models.Flight;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -16,9 +17,9 @@ import java.util.UUID;
 @RequestMapping("/api/v1/flight")
 public class CreateFlightController {
 
-    private final InMemoryFlightRepository repository;
+    private final FlightJpaRepository repository;
 
-    public CreateFlightController(InMemoryFlightRepository repository) {
+    public CreateFlightController(FlightJpaRepository repository) {
         this.repository = repository;
     }
 
@@ -31,7 +32,7 @@ public class CreateFlightController {
                 request.arrivalAirportCode(),
                 request.price());
 
-        repository.save(flight);
+        repository.save(FlightEntity.from(flight));
         return ResponseEntity.status(HttpStatus.CREATED).body(flight);
     }
 }
