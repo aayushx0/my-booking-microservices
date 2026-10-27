@@ -4,11 +4,15 @@ server:
 spring:
   application:
     name: flight
+  mvc:
+    problemdetails:
+      enabled: true
   datasource:
     url: jdbc:postgresql://localhost:5432/flight_write
     username: postgres
     password: postgres
   jpa:
+    open-in-view: false
     hibernate:
       ddl-auto: validate
   flyway:

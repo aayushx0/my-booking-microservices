@@ -2,8 +2,8 @@ package io.bookingmicroservices.flight.flights.features.getflightbyid;
 
 import io.bookingmicroservices.flight.data.jpa.entities.FlightEntity;
 import io.bookingmicroservices.flight.data.jpa.repositories.FlightJpaRepository;
+import io.bookingmicroservices.flight.flights.exceptions.FlightNotFoundException;
 import io.bookingmicroservices.flight.flights.models.Flight;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,10 +22,9 @@ public class GetFlightByIdController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Flight> getById(@PathVariable UUID id) {
+    public Flight getById(@PathVariable UUID id) {
         return repository.findById(id)
                 .map(FlightEntity::toModel)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+                .orElseThrow(() -> new FlightNotFoundException(id));
     }
 }
